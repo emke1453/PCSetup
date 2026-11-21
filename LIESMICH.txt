@@ -1,0 +1,143 @@
+PC-SETUP
+========
+
+START
+  Setup.bat       -> Fenster (fragt nach Administrator-Rechten)
+  Setup_auto.bat  -> installiert das zuletzt verwendete Profil vollautomatisch
+                     (anderes Profil:  Setup_auto.bat Gaming)
+  Setup_auto_probelauf.bat -> zeigt nur, was Setup_auto.bat tun wuerde (aendert nichts)
+
+PROBELAUF
+  Button "Probelauf" (Fenster) bzw. Setup_auto_probelauf.bat: zeigt im Log fuer jeden Schritt
+  "wuerde installiert / bereits installiert / wuerde ausgefuehrt / bereits erledigt".
+  Es wird nichts installiert, kein Befehl ausgefuehrt, kein Wiederherstellungspunkt, kein Neustart.
+  Nur die Pruefteile der Befehle laufen (die lesen nur).
+
+LOG
+  Button "Log oeffnen" zeigt das Log der aktuellen Sitzung. Alle Logs: Ordner "logs".
+
+ABLAUF BEIM PC-WECHSEL
+  Auf dem ALTEN PC:
+   1. Setup.bat starten, Reiter "Vom alten PC uebernehmen":
+      - "Installierte Programme einlesen" -> Treffer anhaken, Kategorie, hinzufuegen
+      - "WLAN-Profile exportieren"
+   2. Befehle rechts anhaken (z.B. "WLAN-Profile importieren", NAS-Einstellungen)
+   3. "Speichern"
+   4. Flipper-Payload-erstellen.bat ausfuehren, Dateien auf den Flipper
+  Auf dem NEUEN PC:
+   5. Flipper anstecken, PC-Setup-Flipper-Auto.txt starten -> laeuft alles durch
+
+FENSTER - REITER "AUSWAHL"
+  Links Programme, rechts Befehle anhaken.
+  Gruen + [installiert] = schon auf diesem PC (wird beim Start geprueft).
+  Entfernen / Status pruefen / Alle aktualisieren (winget upgrade --all)
+  Haekchen "Status beim Start automatisch pruefen": an = Pruefung bei jedem Start
+  (dauert einige Sekunden), aus = nur per Button. Gespeichert in einstellungen.txt.
+
+FENSTER - REITER "PROGRAMME SUCHEN / HINZUFUEGEN"
+  Regex-Suche, z.B.  obs|vlc|gimp   ^Mozilla\.   notepad\+\+
+  Treffer anhaken, Kategorie waehlen, "Angehakte zum Baum hinzufuegen".
+  (winget kennt keinen Regex: gesucht wird nach den Woertern, gefiltert mit dem Regex.)
+
+PROFILE
+  Unten "Profil": mehrere Auswahlen, z.B. Standard, Gaming, Eltern-PC.
+  Jedes Profil = eine Datei im Ordner "profile" mit Programmen, Haken, Sprache und Optionen.
+  "Neues Profil" legt eine Kopie der aktuellen Auswahl an.
+  Die Befehle im Ordner "befehle" gelten fuer alle Profile, nur die Haken sind je Profil.
+
+OPTIONEN (je Profil gespeichert)
+  - Vorher Wiederherstellungspunkt erstellen (Systemwiederherstellung wird dafuer aktiviert)
+  - Am Ende neu starten (Fenster: Rueckfrage, Automatik: 30 s Countdown, Taste = Abbruch)
+
+ZURUECKSETZEN
+  Button "Systemwiederherstellung oeffnen" (oder Win+R -> rstrui) -> Punkt "PC-Setup ..." waehlen.
+  Setzt Einstellungen, Registry und danach installierte Programme zurueck, NICHT deine Dateien.
+  Startet Windows nicht mehr: PC beim Starten 2x ausschalten -> Problembehandlung ->
+  Erweiterte Optionen -> Systemwiederherstellung.
+
+EIGENE BEFEHLE
+  Jeder Befehl ist eine Datei im Ordner "befehle" (.ps1 = PowerShell, .cmd = CMD).
+  Im Fenster: Neu / Bearbeiten / Loeschen / Jetzt testen / Ordner oeffnen.
+  Oder direkt mit Notepad:
+     Dateiname:  "75 Mein Befehl.ps1"   (Nummer = Reihenfolge, wird nicht angezeigt)
+     PowerShell: Ausgaben mit Write-Host, Fehler mit  throw "Text"
+     CMD:        Ausgaben mit echo, Fehler mit  exit /b 1
+     Kein "pause" verwenden.
+  Danach im Fenster anhaken und "Speichern".
+
+  PRUEFUNG "SCHON ERLEDIGT?" (optional, pro Befehl)
+  Hat ein Befehl einen Pruefteil, wird er beim Start und bei "Status pruefen" geprueft.
+  Erledigte Befehle stehen mit [erledigt] in der Liste und werden beim Installieren
+  (auch in der Automatik) uebersprungen. "Jetzt testen" fuehrt sie trotzdem aus.
+  Befehle ohne Pruefteil laufen immer.
+    PowerShell - ganz oben in der Datei:
+        param([switch]$Pruefen)
+        if ($Pruefen) {
+            return (Get-ItemProperty "HKLM:\...").MeinWert -eq 1    # $true = erledigt
+        }
+        ...eigentlicher Befehl...
+    CMD:
+        if /i "%~1"=="pruefen" (
+            reg query "HKLM\..." /v MeinWert | find "0x1" >nul && exit /b 0
+            exit /b 1
+        )
+        ...eigentlicher Befehl...
+  Neue Befehle aus dem Editor enthalten dieses Geruest schon.
+
+WLAN-PROFILE
+  Export (alter PC): Reiter "Vom alten PC uebernehmen" -> Dateien im Ordner "wlan".
+  Import (neuer PC): Befehl "WLAN-Profile importieren" anhaken.
+  ACHTUNG: Die Passwoerter stehen im Klartext in den Dateien und in der Flipper-Datei.
+  Nicht weitergeben, nach dem Einrichten den Ordner "wlan" leeren
+  (Button "Exportierte loeschen") und die Flipper-Dateien neu erzeugen.
+  Firmen-WLANs mit Benutzername/Zertifikat (802.1X) werden ohne Zugangsdaten uebernommen.
+
+NETZLAUFWERKE / NAS-ZUGANGSDATEN (Reiter "Netzlaufwerke")
+  Alter PC: "Vom PC einlesen" uebernimmt Laufwerksbuchstaben, Pfade und Benutzernamen.
+            Passwoerter gibt Windows nicht heraus -> einmal eintragen, "Speichern".
+            Leerer Laufwerksbuchstabe = nur Zugangsdaten speichern (ohne Laufwerk).
+  Neuer PC: Befehl "Netzlaufwerke verbinden" anhaken (laeuft nach den NAS-Einstellungen 70-72).
+            Speichert die Zugangsdaten (cmdkey) und verbindet die Laufwerke dauerhaft.
+            Die Laufwerke erscheinen spaetestens nach einem Neustart im Explorer.
+  ACHTUNG: Passwoerter stehen im Klartext in netzlaufwerke.csv und in der Flipper-Datei.
+  Alle uebrigen Windows-Zugangsdaten: Button "Windows-Anmeldeinformationen ..." ->
+  "Anmeldeinformationen sichern" (alter PC) / "wiederherstellen" (neuer PC).
+  Das ist verschluesselt, verlangt aber Strg+Alt+Entf und geht nicht automatisch.
+
+SPRACHE
+  Ist die gewaehlte Sprache fuer ein Programm nicht verfuegbar, wird Englisch (en-US)
+  und danach die Standardsprache des Programms verwendet.
+
+ONLINE-VERSION UEBER GITHUB (oeffentliches Repository, ohne Token)
+  1. Inhalt dieses Ordners in ein oeffentliches GitHub-Repository hochladen
+     (die Datei .gitignore sorgt dafuer, dass wlan, netzlaufwerke.csv, logs usw. NICHT hochgeladen werden).
+  2. In github.txt (neben Flipper-Payload-erstellen.bat) die Repository-Adresse eintragen,
+     z.B.  https://github.com/maxmuster/PC-Setup
+  3. Flipper-Payload-erstellen.bat ausfuehren -> zusaetzlich entstehen
+       PC-Setup-Flipper-Online.txt       (laedt von GitHub, oeffnet das Fenster)
+       PC-Setup-Flipper-Online-Auto.txt  (laedt von GitHub, startet die Automatik)
+  Diese beiden muessen NICHT neu erzeugt werden, wenn du etwas aenderst - sie laden immer
+  den aktuellen Stand. Einfach Aenderungen auf GitHub hochladen.
+  Die Online-Variante enthaelt keine WLAN-Profile und keine Netzlaufwerk-Passwoerter.
+  Liegt auf dem Desktop schon ein Ordner PC-Setup, wird er aktualisiert (eigene Dateien bleiben).
+
+FLIPPER ZERO (OFFLINE)
+  Flipper-Payload-erstellen.bat (im uebergeordneten Ordner) erzeugt:
+   - PC-Setup-Flipper.txt       -> kopiert alles auf den Desktop, oeffnet das Fenster
+   - PC-Setup-Flipper-Auto.txt  -> kopiert alles auf den Desktop, startet Setup_auto.bat
+  Nach /badusb/ auf die SD-Karte kopieren. Layout im Flipper: de-DE.
+  Nach dem Tippen wird eine Pruefsumme kontrolliert. Bei "FEHLER: Uebertragung fehlerhaft"
+  wurde ein Zeichen verschluckt -> Script einfach nochmal starten.
+  Nach jeder Aenderung die Flipper-Dateien neu erzeugen.
+
+ENERGIE / UPDATES (mitgelieferte Befehle)
+  62 Festplatte nie ausschalten, 63 Standby nie (Server), 64 Bildschirm nie aus,
+  65 Ruhezustand deaktivieren - gelten fuer den aktiven Energieplan im Netzbetrieb.
+  Wird auch 60 (Hoechstleistung) angehakt, laeuft er vorher, die Werte gelten dann fuer diesen Plan.
+  95 Windows-Updates installieren (inkl. Treiber), ohne Zusatzmodul. Dauert ggf. lange,
+  nach einem Neustart evtl. nochmal ausfuehren. Hat absichtlich keinen Pruefteil.
+
+MITGELIEFERTE BEFEHLE
+  U.a. Netzlaufwerk (70-72: AllowInsecureGuestAuth, SMB-Signierung) und gpedit.msc fuer
+  Windows Home (80). Danach Neustart empfohlen.
+  Achtung: Die SMB-Einstellungen senken die Sicherheit. Nur im eigenen Netz nutzen.
