@@ -1,0 +1,45 @@
+﻿Aktiv;Kategorie;Name;WingetID
+0;Browser;Google Chrome;Google.Chrome
+0;Browser;Firefox;Mozilla.Firefox
+0;Browser;Brave;Brave.Brave
+0;Tools;7-Zip;7zip.7zip
+0;Tools;Notepad++;Notepad++.Notepad++
+0;Tools;Everything (Dateisuche);voidtools.Everything
+0;Tools;PowerToys;Microsoft.PowerToys
+0;Tools;VLC Media Player;VideoLAN.VLC
+0;Tools;ShareX;ShareX.ShareX
+0;Tools;qFlipper;Flipper.qFlipper
+1;Entwicklung;Git;Git.Git
+0;Entwicklung;Visual Studio Code;Microsoft.VisualStudioCode
+0;Entwicklung;Python 3.12;Python.Python.3.12
+0;Entwicklung;Node.js LTS;OpenJS.NodeJS.LTS
+0;Entwicklung;Windows Terminal;Microsoft.WindowsTerminal
+0;Kommunikation;Discord;Discord.Discord
+0;Kommunikation;Telegram;Telegram.TelegramDesktop
+0;Kommunikation;Signal;OpenWhisperSystems.Signal
+0;Freizeit;Steam;Valve.Steam
+0;Freizeit;Spotify;Spotify.Spotify
+0;Freizeit;Epic Games Launcher;EpicGames.EpicGamesLauncher
+0;Sonstiges;LibreOffice;TheDocumentFoundation.LibreOffice
+0;Sonstiges;Adobe Acrobat Reader;Adobe.Acrobat.Reader.64-bit
+1;_Einstellung;Dateiendungen anzeigen;10 Dateiendungen anzeigen.ps1
+1;_Einstellung;Versteckte Dateien anzeigen;20 Versteckte Dateien anzeigen.ps1
+0;_Einstellung;Dunkles Design;30 Dunkles Design.ps1
+0;_Einstellung;Zeitzone Berlin;40 Zeitzone Berlin.ps1
+0;_Einstellung;WLAN-Profile importieren;45 WLAN-Profile importieren.ps1
+0;_Einstellung;Klassisches Kontextmenue (Win 11);50 Klassisches Kontextmenue (Win 11).ps1
+0;_Einstellung;Energiesparplan Hoechstleistung;60 Energiesparplan Hoechstleistung.ps1
+0;_Einstellung;Energie - Festplatte nie ausschalten;62 Energie - Festplatte nie ausschalten.ps1
+0;_Einstellung;Energie - Standby nie (Server);63 Energie - Standby nie (Server).ps1
+0;_Einstellung;Energie - Bildschirm nie ausschalten;64 Energie - Bildschirm nie ausschalten.ps1
+0;_Einstellung;Energie - Ruhezustand komplett deaktivieren;65 Energie - Ruhezustand komplett deaktivieren.ps1
+0;_Einstellung;NAS - Gast-Anmeldung erlauben;70 NAS - Gast-Anmeldung erlauben.ps1
+0;_Einstellung;NAS - SMB-Client Signierung aus;71 NAS - SMB-Client Signierung aus.ps1
+0;_Einstellung;NAS - SMB-Server Signierung aus;72 NAS - SMB-Server Signierung aus.ps1
+0;_Einstellung;Netzlaufwerke verbinden;75 Netzlaufwerke verbinden.ps1
+0;_Einstellung;Gruppenrichtlinien-Editor nachinstallieren (Home);80 Gruppenrichtlinien-Editor nachinstallieren (Home).ps1
+0;_Einstellung;DNS-Cache leeren (Beispiel CMD);90 DNS-Cache leeren (Beispiel CMD).cmd
+1;_Einstellung;Windows-Updates installieren;95 Windows-Updates installieren.ps1
+1;_Sprache;Deutsch;de-DE
+1;_Option;Wiederherstellungspunkt;restorepoint
+0;_Option;Neustart am Ende;restart
